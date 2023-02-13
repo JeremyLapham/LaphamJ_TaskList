@@ -84,13 +84,14 @@ function CreateElements() {
 
 
             let pTaskDueDate = document.createElement('p');
-            pTaskDueDate.textContent = 'Due: ' + task.dueDate.replace('T', ' ');
+            pTaskDueDate.textContent = 'Due: ' + task.dueDate;
             pTaskDueDate.className = 'taskCard';
 
             let deleteBtn = document.createElement('button');
             deleteBtn.className = 'btn btn-danger';
             deleteBtn.textContent = 'Delete';
             deleteBtn.type = 'button';
+            deleteBtn.style.marginBottom = '1rem';
             deleteBtn.addEventListener('click', function () {
                 removeFromLocalStorage(task.task);
                 CreateElements()
@@ -100,10 +101,89 @@ function CreateElements() {
             editBtn.className = 'btn btn-warning';
             editBtn.textContent = 'Edit';
             editBtn.type = 'button';
+            editBtn.style.marginBottom = '1rem';
             editBtn.addEventListener('click', function () {
-                // Open a modal or create a form to edit the task
-                // Populate the form with the task data
-                // Allow the user to edit the task and save changes
+                console.log(task.task);
+                console.log(task.taskDes);
+                console.log(task.priority);
+                console.log(task.dueDate);
+                let modal = document.createElement('div');
+                modal.className = 'modal';
+                modal.style.display = 'block';
+                modal.style.position = 'fixed';
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+                modal.style.zIndex = '999';
+
+                let modalContent = document.createElement('div');
+                modalContent.className = 'modal-content';
+
+                let closeBtn = document.createElement('span');
+                closeBtn.className = 'close';
+                closeBtn.textContent = 'x';
+                closeBtn.addEventListener('click', function () {
+                    modal.style.display = 'none';
+                });
+
+                let form = document.createElement('form');
+                form.action = '';
+                form.method = 'post';
+
+                let taskInput = document.createElement('input');
+                taskInput.type = 'text';
+                taskInput.value = task.task;
+                taskInput.name = 'task';
+
+                let taskDesInput = document.createElement('textarea');
+                taskDesInput.value = task.taskDes;
+                taskDesInput.name = 'taskDes';
+
+                let priorityInput = document.createElement('input');
+                priorityInput.type = 'text';
+                priorityInput.value = task.priority;
+                priorityInput.name = 'priority';
+
+                let dueDateInput = document.createElement('input');
+                dueDateInput.type = 'datetime-local';
+                dueDateInput.value = task.dueDate;
+                dueDateInput.name = 'dueDate';
+
+                let submitBtn = document.createElement('button');
+                submitBtn.type = 'submit';
+                submitBtn.textContent = 'Save Changes';
+                submitBtn.className = 'btn btn-primary';
+                submitBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    console.log(taskInput)
+                    console.log(taskInput.value)
+                  
+                    let updatedTask = {
+                      task: taskInput.value,
+                      taskDes: taskDesInput.value,
+                      priority: priorityInput.value,
+                      dueDate: dueDateInput.value
+                    };
+                  
+                    removeFromLocalStorage(task.task);
+                    saveToLocalStorage(updatedTask);
+                    CreateElements();
+                  
+                    modal.style.display = 'none';
+                  });
+                  console.log(taskInput)
+                  console.log(taskInput.value)
+                form.appendChild(taskInput);
+                form.appendChild(taskDesInput);
+                form.appendChild(priorityInput);
+                form.appendChild(dueDateInput);
+                form.appendChild(submitBtn);
+
+                modalContent.appendChild(closeBtn);
+                modalContent.appendChild(form);
+
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
             });
 
             taskContainer.appendChild(pTask);
@@ -118,5 +198,6 @@ function CreateElements() {
         });
     }
 }
+
 
 CreateElements()

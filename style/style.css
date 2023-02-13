@@ -43,9 +43,28 @@
     word-wrap: break-word;
 }
 
-.targetDiv {
+/* .targetDiv {
     background-color: rgba(181, 157, 157, 0.877);
     width: 400px;
     border-radius: 10px;
     margin-bottom:12px;
+} */
+
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #9d9d9d;
+    border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #000000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb:hover {
+    background: #9c9c9c;
 }
