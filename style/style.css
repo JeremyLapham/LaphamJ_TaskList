@@ -33,8 +33,9 @@
     word-wrap: break-word;
     margin-bottom: 10px;
 }
+
 .taskCardDescription {
-    padding:5px;
+    padding: 5px;
     background-color: rgba(255, 255, 255, 0.877);
     width: 400px;
     height: fit-content;
@@ -43,13 +44,27 @@
     word-wrap: break-word;
 }
 
-/* .targetDiv {
+.targetDiv {
     background-color: rgba(181, 157, 157, 0.877);
     width: 400px;
     border-radius: 10px;
-    margin-bottom:12px;
-} */
+    margin-bottom: 1rem;
+}
 
+.columnTXT {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.locationLine {
+    color:white;
+    border-radius: 10px;
+    position: absolute;
+    border-bottom: 12px solid;
+    margin: 3.5rem 0 0 5rem !important;
+    width: 90% !important;
+}
 
 ::-webkit-scrollbar {
     width: 12px;
@@ -57,14 +72,12 @@
     border-radius: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     background: #000000;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb:hover {
     background: #9c9c9c;
 }
