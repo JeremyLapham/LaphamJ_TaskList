@@ -1,5 +1,6 @@
 import { saveToLocalStorage, getLocalStorage, removeFromLocalStorage } from './localStorage.js';
 
+const addTaskBtn = document.getElementById('addTaskBtn');
 const saveTask = document.getElementById('saveTask');
 
 const taskName = document.getElementById('taskName');
@@ -12,8 +13,31 @@ const toDo = document.getElementById('toDo');
 const inProgress = document.getElementById('inProgress');
 const completed = document.getElementById('completed');
 
-
+let selectedTask = null;
 saveTask.addEventListener('click', function () {
+    if (selectedTask) {
+        // Edit existing task
+        let tasksSave = {
+            name: taskName.value,
+            description: taskDescription.value,
+            location: placeTask.value,
+            priority: taskPriority.value,
+            date: dateTime.value,
+        };
+        if (JSON.stringify(tasksSave) !== JSON.stringify(selectedTask)) {
+            removeFromLocalStorage(selectedTask);
+            saveToLocalStorage(tasksSave);
+            CreateElements();
+        }
+        selectedTask = null;
+        saveTask.reset();
+    } else {
+        // Add new task
+        addTask();
+    }
+});
+
+function addTask() {
     let tasksSave = {
         name: taskName.value,
         description: taskDescription.value,
@@ -27,19 +51,36 @@ saveTask.addEventListener('click', function () {
     } else {
         saveToLocalStorage(tasksSave)
         CreateElements()
-        taskName.value = '';
-        taskDescription.value = '';
-        dateTime.value = '';
-        taskPriority.value = 'none';
-        placeTask.value = 'none';
+        saveTask.reset();
     }
-});
+}
 
-// function clearBoxes(){
-//     toDo.innerHTML = "";
-//     inProgress.innerHTML = "";
-//     completed.innerHTML = "";
-// }
+function editSelectedTask(task) {
+    taskName.value = task.name;
+    taskDescription.value = task.description;
+    placeTask.value = task.location;
+    taskPriority.value = task.priority;
+    dateTime.value = task.date;
+
+    selectedTask = task;
+    saveTask.removeEventListener('click', addTask);
+    saveTask.addEventListener('click', function () {
+        const tasksSave = {
+            name: taskName.value,
+            description: taskDescription.value,
+            location: placeTask.value,
+            priority: taskPriority.value,
+            date: dateTime.value,
+        };
+        if (JSON.stringify(tasksSave) !== JSON.stringify(selectedTask)) {
+            removeFromLocalStorage(selectedTask);
+            saveToLocalStorage(tasksSave);
+            CreateElements();
+        }
+        selectedTask = null;
+        saveTask.reset();
+    });
+}
 
 function CreateElements() {
     let tasks = getLocalStorage();
@@ -92,12 +133,10 @@ function CreateElements() {
         editBtn.textContent = 'Edit Task';
         editBtn.setAttribute("data-bs-toggle", "modal");
         editBtn.setAttribute("data-bs-target", "#exampleModal");
+        editBtn.style.marginBottom = '1rem';
+        editBtn.style.marginLeft = '230px';
         editBtn.addEventListener('click', function () {
-            taskName.value = task.name;
-            taskDescription.value = task.description;
-            placeTask.value = task.location;
-            taskPriority.value = task.priority;
-            dateTime.value = task.dueDate;
+            editSelectedTask(task);
         });
 
         taskContainer.appendChild(pTask);
@@ -116,6 +155,5 @@ function CreateElements() {
         }
     });
 }
-
 
 CreateElements()
